@@ -9,7 +9,7 @@
 # crons
 
 function echoTitreEtape {
-    echo -e "\e[34m=========================================================="
+    echo -e "\e[32m=========================================================="
     echo $1
     echo -e "==========================================================\e[39m"
 }
@@ -33,9 +33,9 @@ echoTitreEtape "Vérification prérequis"
 # ==========================================================
 function verifierPreRequis {
     if [ -f "/home/pi/git/install-domotic/$1" ];then
-        echo -e "$1 \e[32mOK";
+        echo -e "$1 \e[32mOK\e[39m";
     else
-        echo -e "$1 \e[31mKO";
+        echo -e "$1 \e[31mKO\e[39m";
         exit 1
     fi
 }
@@ -50,22 +50,27 @@ verifierPreRequis "ssh/id_rsa.pub"
 # ==========================================================
 echoTitreEtape "MAJ Système"
 # ==========================================================
-apt-get update
-apt-get upgrade
+sudo apt-get -y update
+sudo apt-get -y upgrade
+
+# ==========================================================
+echoTitreEtape "Installation paquets de base"
+# ==========================================================
+curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+sudo apt-get install -y nodejs
 
 # ==========================================================
 echoTitreEtape "Clé SSH"
 # ==========================================================
-cp ~/git/install-domotic/ssh/* ~/.ssh/
+mkdir -p ~/.ssh
+sudo cp ~/git/install-domotic/ssh/* ~/.ssh/
 echoOK
 
 # ==========================================================
 echoTitreEtape "Domotic"
 # ==========================================================
-cd
-mkdir git
-cd git
-git clone
+cd ~/git
+git clone git@github.com:sebsebseb1982/domotic2.git
 
 cd domotic2
 npm install
