@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# A sauvegarder
+#
+# Musique
+# clé SSH
+# fstab
+# configuration
+# crons
+
 function echoTitreEtape {
     echo -e "\e[34m=========================================================="
     echo $1
