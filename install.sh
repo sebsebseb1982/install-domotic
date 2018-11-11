@@ -58,6 +58,8 @@ echoTitreEtape "Installation paquets de base"
 # ==========================================================
 curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
 sudo apt-get install -y nodejs
+# Nécessaire pour que le npm install de la domotique se passe correctement
+sudo apt-get install -y libavahi-compat-libdnssd-dev
 
 # ==========================================================
 echoTitreEtape "Clé SSH"
@@ -69,11 +71,15 @@ echoOK
 # ==========================================================
 echoTitreEtape "Domotic"
 # ==========================================================
+sudo npm install -g typescript
 cd ~/git
 git clone git@github.com:sebsebseb1982/domotic2.git
 
+mv install-domotic/configuration/configuration.ts domotic2/src/configuration/
+
 cd domotic2
 npm install
+tsc
 
 # ==========================================================
 echoTitreEtape "Wiring Pi"
