@@ -1,0 +1,2 @@
+192.168.1.169:/volume1/timelapse /mnt/timelapse nfs defaults,user,auto,noatime,intr 0 0
+UUID=1b265579-36ec-4de2-820a-b87223d7ee51 /mnt/usb
