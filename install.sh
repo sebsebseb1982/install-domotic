@@ -43,6 +43,8 @@ function verifierPreRequis {
 verifierPreRequis "crontab/crontab-user-root.txt"
 verifierPreRequis "crontab/crontab-user-pi.txt"
 verifierPreRequis "fstab/fstab.txt"
+verifierPreRequis "modules/modules.txt"
+verifierPreRequis "modules/config.txt"
 verifierPreRequis "configuration/configuration.ts"
 verifierPreRequis "ssh/id_rsa"
 verifierPreRequis "ssh/id_rsa.pub"
@@ -100,6 +102,13 @@ echoTitreEtape "Installation des cron pi & root"
 # ==========================================================
 crontab ~/git/install-domotic/crontab/crontab-user-pi.txt
 sudo crontab ~/git/install-domotic/crontab/crontab-user-root.txt
+echoOK
+
+# ==========================================================
+echoTitreEtape "Support du bus 1wire"
+# ==========================================================
+sudo cat ~/git/install-domotic/w1/modules.txt >> /etc/modules
+sudo cat ~/git/install-domotic/w1/config.txt >> /boot/config.txt
 echoOK
 
 exit 0
