@@ -12,19 +12,50 @@
       apt: >
         name=git
         state=latest
-    - name: Download zsh installer
+- name: Node.js
+  hosts: domotic 
+  remote_user: pi 
+  tasks:
+    - name: Update et upgrade packets apt
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+    - name: Téléchargement setup Node.js 11
       get_url: >
         url=https://deb.nodesource.com/setup_11.x
         dest=/tmp/setupNodeJs11.sh
         mode=777
-    - name: Execute the setupNodeJs11.sh
+    - name: Exécution setup Node.js 11
       become: true
       shell: /tmp/setupNodeJs11.sh
-    - name: Remove the setupNodeJs11.sh
+    - name: Suppression setup Node.js 11
       file: path=/tmp/setupNodeJs11.sh state=absent
-    - name : Clone WiringPi
-      git: >
-        repo=git://git.drogon.net/wiringPi
-        dest=~/wiringPi
-    - name : Installation WiringPi
-      command: cd ~/wiringPi && ./build
+    - name: Installation Node.js
+      become: true
+      apt: >
+        name=nodejs
+        state=latest
+- name: WiringPi
+  hosts: domotic 
+  remote_user: pi 
+  tasks:
+    - name: Installation WiringPi
+      become: true
+      apt: >
+        name=wiringpi
+        state=latest
+- name: Domotic
+  hosts: domotic 
+  remote_user: pi 
+  tasks:
+    - name: Installation globale de Typescript
+      become: true
+      npm:
+        name: typescript
+        global: yes
+    - name: Téléchargement des sources
+      git: 
+        repo: git@github.com:sebsebseb1982/domotic2.git
+        dest: ~/git/domotic2
+        accept_hostkey: yes
