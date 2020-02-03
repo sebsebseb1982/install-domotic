@@ -1,0 +1,5 @@
+- name: apt install
+  become: true
+  apt: 
+    name: wiringpi
+    state: latest

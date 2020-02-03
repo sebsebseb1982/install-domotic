@@ -1,1 +1,0 @@
-dtoverlay=w1-gpio

@@ -1,0 +1,10 @@
+- name: Installation globale de Typescript
+  become: true
+  npm:
+    name: typescript
+    global: yes
+- name: Téléchargement des sources
+  git: 
+    repo: git@github.com:sebsebseb1982/domotic2.git
+    dest: ~/git/domotic2
+    accept_hostkey: yes

@@ -1,5 +1,0 @@
-# Health check
-0 8,12,16,20,22 * * * npm --prefix /home/pi/domotic2 run health-check
-
-# Relais
-# @reboot sleep 60 && npm --prefix /home/pi/domotic2 run initialize-relay-board

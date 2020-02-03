@@ -1,0 +1,10 @@
+- name: Update et upgrade packets apt
+  become: true
+  apt:
+    upgrade: yes
+    update_cache: yes
+- name: Installation Git
+  become: true
+  apt:
+    name: git
+    state: latest

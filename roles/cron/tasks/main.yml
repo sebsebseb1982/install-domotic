@@ -1,0 +1,19 @@
+# Utilisateur root
+- name: Initialisation relais
+  become: true
+  cron:
+    name: Initialisation relais
+    special_time: reboot
+    job: sleep 60 && npm --prefix /home/pi/domotic2 run initialize-relay-board
+
+# Utilisateur pi
+- name: Notification reboot
+  cron:
+    name: Notification reboot
+    special_time: reboot
+    job: node /home/pi/git/domotic2/src/notify-me/reboot/reboot.js
+- name: Initialisation relais
+  cron:
+    name: Initialisation relais
+    special_time: reboot
+    job: sleep 60 && npm --prefix /home/pi/domotic2 run initialize-relay-board

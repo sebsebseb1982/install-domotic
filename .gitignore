@@ -3,3 +3,5 @@
 
 configuration/configuration.ts
 ssh/*
+
+**/files/*
