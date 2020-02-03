@@ -1,0 +1,13 @@
+- name: Montage dossier Timelapse
+  become: true
+  lineinfile:
+    path: /etc/fstab
+    line: '192.168.1.169:/volume1/timelapse /mnt/timelapse nfs defaults,user,auto,noatime,intr 0 0'
+    state: present
+
+- name: Montage clé USB
+  become: true
+  lineinfile:
+    path: /etc/fstab
+    line: 'UUID=1b265579-36ec-4de2-820a-b87223d7ee51 /mnt/usb'
+    state: present

@@ -6,4 +6,5 @@
 #    - domotic
     - wiringpi
 #    - cron
-#    - reboot
+    - fstab
+    - reboot
