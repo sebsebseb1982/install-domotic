@@ -1,19 +1,203 @@
-# Utilisateur root
-- name: Initialisation relais
-  become: true
-  cron:
-    name: Initialisation relais
-    special_time: reboot
-    job: sleep 60 && npm --prefix /home/pi/domotic2 run initialize-relay-board
-
-# Utilisateur pi
+# ========================================================================================
+# Système
+# ========================================================================================
 - name: Notification reboot
   cron:
     name: Notification reboot
     special_time: reboot
     job: node /home/pi/git/domotic2/src/notify-me/reboot/reboot.js
-- name: Initialisation relais
+
+- name: Health check
   cron:
-    name: Initialisation relais
+    name: Health check
+    minute: 0
+    hour: '*/6'
+    job: npm --prefix /home/pi/git/domotic2 run health-check
+
+- name: Backup CRON
+  cron:
+    name: Backup CRON
+    minute: 0
+    hour: 9
+    day: 1
+    job: npm --prefix /home/pi/git/domotic2 run backup-cron
+
+# ========================================================================================
+# CCTV
+# ========================================================================================
+- name: Nettoyage clé USB
+  cron:
+    name: Nettoyage clé USB
+    minute: 0
+    job: /mnt/usb/pi/ftp/freeSpace.sh
+
+- name: Compression des images CCTV de la veille
+  cron:
+    name: Compression des images CCTV de la veille
+    minute: 0
+    hour: 0
+    job: /mnt/usb/pi/ftp/zipOldSnaps.sh
+
+# ========================================================================================
+# Domotic
+# ========================================================================================
+- name: Démarrage API Domotic
+  cron:
+    name: Démarrage API Domotic
     special_time: reboot
-    job: sleep 60 && npm --prefix /home/pi/domotic2 run initialize-relay-board
+    job: npm --prefix /home/pi/git/domotic2 run api-domotic
+
+- name: Health check API
+  cron:
+    name: Health check API
+    minute: '*/5'
+    job: npm --prefix /home/pi/git/domotic2 run health
+
+- name: Simulateur d'aube
+  cron:
+    name: Simulateur d'aube
+    minute: 20
+    hour: 6
+    weekday: 1-5
+    job: node ~/git/domotic2/src/alarm-clock/alarm-clock.js --progressiveWakeUpDuration=40 --wakeUpDuration=20 --lampCode=chevetSebastien
+
+# ========================================================================================
+# Sonnette
+# ========================================================================================
+- name: Démarrage API sonnette
+  cron:
+    name: Démarrage API sonnette
+    special_time: reboot
+    job: npm --prefix /home/pi/git/domotic2 run api-random-tune
+
+- name: Démarrage scrutation sonnette
+  cron:
+    name: Démarrage scrutation sonnette
+    special_time: reboot
+    job: sleep 60 && npm --prefix /home/pi/git/domotic2 run watch-door-bell
+
+# ========================================================================================
+# Sécurité
+# ========================================================================================
+- name: Simulateur de présence
+  cron:
+    name: Simulateur de présence
+    minute: 0
+    hour: 1
+    job: node /home/pi/git/domotic2/src/security/tv-simulator/tv-simulator.js
+     
+- name: Cerberos
+  cron:
+    name: Cerberos
+    minute: '*/2'
+    job: node /home/pi/git/domotic2/src/security/cerberos.js --nLastMinutes=2
+
+- name: Vérification présence
+  cron:
+    name: Vérification présence
+    job: npm --prefix /home/pi/git/domotic2 run update-presence
+
+- name: Oubli alarme ?
+  cron:
+    name: Oubli alarme ?
+    minute: 0
+    hour: 9,10,14,15
+    weekday: 1-5
+    job: npm --prefix /home/pi/git/domotic2 run notify-me-if-alarm-is-disarmed
+
+# ========================================================================================
+# Chauffage
+# ========================================================================================
+- name: Enregistrement températue (intérieur)
+  cron:
+    name: Enregistrement températue (intérieur)
+    minute: '*/15'
+    job: node ~/git/domotic2/src/sensors/wired-temperature-sensors-recorder.js --location=maison
+
+- name: Enregistrement températue (extérieur)
+  cron:
+    name: Enregistrement températue (extérieur)
+    minute: '*/15'
+    job: node ~/git/domotic2/src/sensors/wired-temperature-sensors-recorder.js --location=exterieur
+
+- name: Mise à jour thermostat
+  cron:
+    name: Mise à jour thermostat
+    job: npm --prefix /home/pi/git/domotic2 run update-thermostat
+
+- name: Consigne température jour
+  cron:
+    name: Consigne température jour
+    minute: 10
+    hour: 6
+    job: npm --prefix /home/pi/git/domotic2 run add-set-point -- 19.5
+
+- name: Consigne température nuit
+  cron:
+    name: Consigne température nuit
+    minute: 30
+    hour: 21
+    job: npm --prefix /home/pi/git/domotic2 run add-set-point -- 16
+
+- name: Consigne température télé-travail matin
+  cron:
+    name: Consigne température télé-travail matin
+    minute: 0
+    hour: 8
+    weekday: 5
+    job: npm --prefix /home/pi/git/domotic2 run add-set-point -- 20.5
+
+- name: Consigne température télé-travail soir
+  cron:
+    name: Consigne température télé-travail soir
+    minute: 30
+    hour: 16
+    weekday: 5
+    job: npm --prefix /home/pi/git/domotic2 run add-set-point -- 19.5
+
+# ========================================================================================
+# Radio
+# ========================================================================================
+- name: Radio - Matinale France Inter
+  cron:
+    name: Radio - Matinale France Inter
+    minute: 0
+    hour: 7
+    weekday: 1-5
+    job: npm --prefix /home/pi/git/domotic2 run start-radio-only-if-present -- 90
+
+- name: Radio - Par Jupiter
+  cron:
+    name: Radio - Par Jupiter
+    minute: 6
+    hour: 17
+    weekday: 1-5
+    job: npm --prefix /home/pi/git/domotic2 run start-radio-only-if-present -- 54
+
+# ========================================================================================
+# Ventilation maison
+# ========================================================================================
+- name: Ventilation maison (semaine)
+  cron:
+    name: Ventilation maison (semaine)
+    minute: '*/15'
+    hour: 7,8,9,10,11,12,13,14,15,16,17,18,19,20,21
+    weekday: 1-5
+    job: npm --prefix /home/pi/git/domotic2 run ventilate-house
+
+- name: Ventilation maison (week-end)
+  cron:
+    name: Ventilation maison (week-end)
+    minute: '*/15'
+    hour: 10,11,12,13,14,15,16,17,18,19,20,21,22
+    weekday: 6-7
+    job: npm --prefix /home/pi/git/domotic2 run ventilate-house
+
+# ========================================================================================
+# Surveillance URL
+# ========================================================================================
+- name: Surveillance URL
+  cron:
+    name: Surveillance URL
+    special_time: reboot
+    job: node /home/pi/git/domotic2/src/notify-me/internet/url-monitor.js

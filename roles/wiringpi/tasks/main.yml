@@ -3,3 +3,42 @@
   apt: 
     name: wiringpi
     state: latest
+
+- name: Active le 1-Wire
+  become: true
+  shell:
+    cmd: raspi-config nonint do_onewire 0
+
+- name: 1-Wire - configuration /etc/modules
+  become: true
+  lineinfile:
+    path: /etc/modules
+    line: 'dtoverlay=w1-gpio'
+    state: present
+
+- name: 1-Wire - /boot/config.txt 1/2
+  become: true
+  lineinfile:
+    path: /boot/config.txt
+    line: 'w1-gpio pullup=1'
+    state: present
+
+- name: 1-Wire - /boot/config.txt 2/2
+  become: true
+  lineinfile:
+    path: /boot/config.txt
+    line: 'w1-therm'
+    state: present
+
+- name: Cron initialisation relais (root)
+  become: true
+  cron:
+    name: Initialisation relais
+    special_time: reboot
+    job: sleep 60 && npm --prefix /home/pi/domotic2 run initialize-relay-board
+
+- name: Cron initialisation relais (pi)
+  cron:
+    name: Initialisation relais
+    special_time: reboot
+    job: sleep 60 && npm --prefix /home/pi/domotic2 run initialize-relay-board

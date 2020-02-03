@@ -1,5 +1,8 @@
 # Installation de la domotique
 
+## Lancement de l'installation
+'''ansible-playbook install-domotic.yml -i domotic.ini'''
+
 ## Etapes manuelles
 
 ### Activation SSH sur le RaspberryPi

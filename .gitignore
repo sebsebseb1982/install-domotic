@@ -1,7 +1,4 @@
 .idea
 **.iml
 
-configuration/configuration.ts
-ssh/*
-
-**/files/*
+roles/domotic/files/*

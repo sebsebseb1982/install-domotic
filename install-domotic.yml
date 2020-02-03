@@ -4,5 +4,6 @@
 #    - common
 #    - nodejs
 #    - domotic
-#    - wiringpi
-    - cron
+    - wiringpi
+#    - cron
+#    - reboot
