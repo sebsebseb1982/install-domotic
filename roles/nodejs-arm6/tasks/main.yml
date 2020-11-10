@@ -1,0 +1,25 @@
+- name: Création répertoire temporaire
+  file: path=/tmp/node14/ state=directory
+
+- name: Télécharge Node.js pour ARM v6
+  get_url: 
+    url: https://unofficial-builds.nodejs.org/download/release/v14.10.0/node-v14.10.0-linux-armv6l.tar.gz 
+    dest: /tmp/node14/node-v14.10.0-linux-armv6l.tar.gz
+    mode: 0755
+
+- name: Décompresse archive
+  unarchive:
+    src: /tmp/node14/node-v14.10.0-linux-armv6l.tar.gz
+    dest: /tmp/node14
+    remote_src: yes
+
+- name: Copie de Node.js
+  copy:
+    src: /tmp/node14/node-v14.10.0-linux-armv6l/
+    dest: /usr/local
+    remote_src: yes
+    mode: 0777
+  become: yes
+
+- name: Supprime téléchargement
+  file: path=/tmp/node14/ state=absent

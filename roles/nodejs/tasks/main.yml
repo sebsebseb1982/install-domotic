@@ -1,13 +1,16 @@
-- name: Téléchargement setup Node.js 11
+- name: Téléchargement setup Node.js
   get_url:
-    url: https://deb.nodesource.com/setup_11.x
-    dest: /tmp/setupNodeJs11.sh
+    url: https://deb.nodesource.com/setup_15.x
+    dest: /tmp/setupNodeJs.sh
     mode: 777
-- name: Exécution setup Node.js 11
+
+- name: Exécution setup Node.js
   become: true
-  shell: /tmp/setupNodeJs11.sh
-- name: Suppression setup Node.js 11
-  file: path=/tmp/setupNodeJs11.sh state=absent
+  shell: /tmp/setupNodeJs.sh
+
+- name: Suppression setup Node.js
+  file: path=/tmp/setupNodeJs.sh state=absent
+
 - name: Installation Node.js
   become: true
   apt: 

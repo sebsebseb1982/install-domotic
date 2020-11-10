@@ -1,9 +1,9 @@
 ---
-- hosts: domotic
+- hosts: playground
   roles:
     - common
     - nodejs
-    - jeedom
+#    - jeedom
 #    - domotic
     - wiringpi
 #    - cron

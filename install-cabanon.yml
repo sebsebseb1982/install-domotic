@@ -1,9 +1,9 @@
 ---
-- hosts: domotic
+- hosts: cabanon
   roles:
-    - common
-    - nodejs
-    - jeedom
+#    - common
+    - nodejs-arm6
+#    - jeedom
 #    - domotic
     - wiringpi
 #    - cron

@@ -1,0 +1,8 @@
+- name: Download jeedom installer
+  get_url: url=https://raw.githubusercontent.com/jeedom/core/master/install/install.sh dest=/tmp/jeedom-installer.sh
+
+- name: Execute the jeedom-installer.sh
+  shell: /tmp/jeedom-installer.sh
+
+- name: Remove the jeedom-installer.sh
+  file: path=/tmp/jeedom-installer.sh state=absent
